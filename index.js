@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const auth = require('./services/auth');
 
+const postapi = require('./api/post');
+
 //userData
 const userData = [
     {
@@ -111,6 +113,8 @@ app.get('/dashboard', auth, (req, res) => {
     }
 
 });
+
+app.use('/post', postapi);
 
 // Start the server
 app.listen(port, () => {
