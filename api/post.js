@@ -39,8 +39,9 @@ const posts = [
     }
 ]
 
-router.get("/dashboard/profile/:email", (req, res) => {
-    const { email } = req.params;
+router.post("/dashboard/profile", (req, res) => {
+    const { email } = req.body;
+    console.log("Req rec for posts", email);
 
     try {
         const user = posts.find(user => user.email === email);
@@ -60,8 +61,8 @@ router.get("/dashboard/profile/:email", (req, res) => {
             res.json({ message: 'User not found' });
         }
     } catch (error) {
-        console.error(error); // Log error for debugging
-        res.status(500).json({ message: 'An error occurred', error: error.message }); // Return a more descriptive error message
+        console.error(error); 
+        res.status(500).json({ message: 'An error occurred', error: error.message }); 
 
     }
 
