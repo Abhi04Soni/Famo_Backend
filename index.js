@@ -3,13 +3,15 @@ const app = express();
 const cors = require('cors');
 const port = 3000
 const jwt = require('jsonwebtoken');
-require('dotenv').config()
+
 const auth = require('./services/auth');
-
 const postapi = require('./api/post');
+const connectDB = require('./services/db');
+const userModal = require('./modal/User')
 
+connectDB();
+require('dotenv').config()
 
-//userData
 const userData = [
     {
         "name": "John Doe",
@@ -49,13 +51,11 @@ app.use(cors());
 
 
 
-
-// Sample route for the homepage
 app.get('/', (req, res) => {
     res.send('Welcome to my Node.js server!');
 });
 
-// Sample login route
+
 app.post('/login', (req, res) => {
     const { email, password } = req.body;
     console.log("Inside /login route request", email, password);
@@ -65,12 +65,12 @@ app.post('/login', (req, res) => {
     console.log(user);
 
     if (user) {
-        // Generate a JWT token if the user is found
+        // Generate a JWT token
         const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY);
         res.json({ message: 'Login successful', token });
         console.log(`User with email ${email} successfully logged in.`);
     } else {
-        // If user not found, return 401 Unauthorized
+
         res.status(401).json({ message: 'User not found' });
         console.log('Invalid credentials');
     }
@@ -79,27 +79,33 @@ app.post('/login', (req, res) => {
 
 
 //signup route
-app.post('/signup', (req, res) => {
+app.post('/signup', async (req, res) => {
     const { email, password } = req.body;
     console.log("Inside /signup route request", email, password);
 
     // Check if user exists
-    const user = userData.find(user => user.email === email && user.password === password);
-    console.log(user);
+    // const user = userData.find(user => user.email === email && user.password === password);
+    let user = (await userModal.findOne({ email }) && await userModal.findOne({ password }));
+    console.log("USER :: " +user);
 
     if (user) {
         console.log("User Already Exists, please login");
         res.json({ message: 'User Already Exists, please login' });
     } else {
-        userData.push({ name: "dummy Name" + userData.length , email: req.body.email, password: req.body.password });
-        // Generate a JWT token if the user is found
+        user = new userModal( {
+            name: email,
+            email,
+            password
+        })
+
+        await user.save();
         const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY);
         console.log("Inside signup route request", email, password);
         res.json({ message: 'User Created Signup successful', token });
 
+
     }
 
-    res.json({ message: 'Signup successful', email });
 });
 
 // A protected route (example)
