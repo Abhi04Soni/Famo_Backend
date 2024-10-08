@@ -15,8 +15,7 @@ const auth = (req, res, next) => {
         console.log(token);
     } else {
         return res.status(401).json({ message: 'No token provided' });
-    }   
-    
+    }  
 }
 
 module.exports = auth;

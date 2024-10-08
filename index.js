@@ -48,6 +48,7 @@ const userData = [
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(postapi);
 
 
 
@@ -55,17 +56,15 @@ app.get('/', (req, res) => {
     res.send('Welcome to my Node.js server!');
 });
 
-
-app.post('/login', (req, res) => {
+//login route
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     console.log("Inside /login route request", email, password);
 
-    // Check if user exists
-    const user = userData.find(user => user.email === email && user.password === password);
+    const user = await userModal.findOne({ email, password });
     console.log(user);
 
     if (user) {
-        // Generate a JWT token
         const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY);
         res.json({ message: 'Login successful', token });
         console.log(`User with email ${email} successfully logged in.`);
@@ -83,16 +82,14 @@ app.post('/signup', async (req, res) => {
     const { email, password } = req.body;
     console.log("Inside /signup route request", email, password);
 
-    // Check if user exists
-    // const user = userData.find(user => user.email === email && user.password === password);
     let user = (await userModal.findOne({ email }) && await userModal.findOne({ password }));
-    console.log("USER :: " +user);
+    console.log("USER :: " + user);
 
     if (user) {
         console.log("User Already Exists, please login");
         res.json({ message: 'User Already Exists, please login' });
     } else {
-        user = new userModal( {
+        user = new userModal({
             name: email,
             email,
             password
@@ -103,12 +100,11 @@ app.post('/signup', async (req, res) => {
         console.log("Inside signup route request", email, password);
         res.json({ message: 'User Created Signup successful', token });
 
-
     }
 
 });
 
-// A protected route (example)
+// A protected route
 app.get('/dashboard', auth, (req, res) => {
     console.log(req.body)
     try {
@@ -121,9 +117,7 @@ app.get('/dashboard', auth, (req, res) => {
 
 });
 
-app.use(postapi);
 
-// Start the server
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
