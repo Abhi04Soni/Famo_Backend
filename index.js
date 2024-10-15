@@ -78,7 +78,7 @@ app.post('/login', async (req, res) => {
 
 
 //signup route
-app.post('/signup', async (req, res) => {
+app.post('/signup' ,async (req, res) => {
     const { email, password } = req.body;
     console.log("Inside /signup route request", email, password);
 
