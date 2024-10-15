@@ -48,7 +48,7 @@ const userData = [
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-app.use(postapi);
+
 
 
 
@@ -82,7 +82,7 @@ app.post('/signup' ,async (req, res) => {
     const { email, password } = req.body;
     console.log("Inside /signup route request", email, password);
 
-    let user = (await userModal.findOne({ email }) && await userModal.findOne({ password }));
+    let user = (await userModal.findOne({ email , password}));
     console.log("USER :: " + user);
 
     if (user) {
@@ -117,6 +117,7 @@ app.get('/dashboard', auth, (req, res) => {
 
 });
 
+app.use(postapi);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
