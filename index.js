@@ -12,38 +12,6 @@ const userModal = require('./modal/User')
 connectDB();
 require('dotenv').config()
 
-const userData = [
-    {
-        "name": "John Doe",
-        "email": "john.doe@example.com",
-        "password": "securePassword123"
-    },
-    {
-        "name": "Jane Smith",
-        "email": "jane.smith@example.com",
-        "password": "strongPassword456"
-    },
-    {
-        "name": "Alice Johnson",
-        "email": "alice.johnson@example.com",
-        "password": "aliceSecret789"
-    },
-    {
-        "name": "Bob Brown",
-        "email": "bob.brown@example.com",
-        "password": "bobPassword321"
-    }, {
-        "name": "Abhi Soni",
-        "email": "soni5abhi23@gmail.com",
-        "password": "Ab@2359078"
-    }, {
-        "name": "Abhi Soni",
-        "email": "a@gmail.com",
-        "password": "Ab@2359078"
-    }
-
-]
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -92,7 +60,9 @@ app.post('/signup' ,async (req, res) => {
         user = new userModal({
             name: email,
             email,
-            password
+            password,
+            postArray: [],
+            conncetionArray: []
         })
 
         await user.save();

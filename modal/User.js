@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+const postSubScheme  = new mongoose.Schema({
+    id : {
+        type: String
+    },
+})
+
+const connctionSubSchema = new mongoose.Schema({
+    id : {
+        type: String
+    }
+})
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -13,7 +24,10 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    postArray: [postSubScheme],
+    conncetionArray: [connctionSubSchema]
+    
 });
 
 const User = mongoose.model('User', UserSchema);

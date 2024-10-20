@@ -1,18 +1,25 @@
 const mongoose = require('mongoose');
 
-const ChatSchema = new mongoose.Schema({
+const chatSubSchema = new mongoose.Schema({
     email: {
-        type: String,
-        required: true
+        type: String
     },
     sendText: {
-        type: String,
-        required: true
+        type: String
     },
     textDateTime: {
-        type: String,
-        required: true
+        type: String
+    },
+    textid: {
+        type: String
     }
+})
+
+const ChatSchema = new mongoose.Schema({
+    sender: {
+        type: String
+    },
+    chatArray : [chatSubSchema]
 });
 
 const Chat = mongoose.model('Chats', ChatSchema);
