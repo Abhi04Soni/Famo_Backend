@@ -11,6 +11,7 @@ const connctionSubSchema = new mongoose.Schema({
         type: String
     }
 })
+
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,

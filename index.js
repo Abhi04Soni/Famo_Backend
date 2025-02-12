@@ -12,13 +12,9 @@ const userModal = require('./modal/User')
 connectDB();
 require('dotenv').config()
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
-
-
 
 app.get('/', (req, res) => {
     res.send('Welcome to my Node.js server!');
@@ -44,9 +40,8 @@ app.post('/login', async (req, res) => {
 
 });
 
-
 //signup route
-app.post('/signup' ,async (req, res) => {
+app.post('/signup' ,async (req, res) => {1
     const { email, password } = req.body;
     console.log("Inside /signup route request", email, password);
 
@@ -69,7 +64,6 @@ app.post('/signup' ,async (req, res) => {
         const token = jwt.sign({ email }, process.env.JWT_SECRET_KEY);
         console.log("Inside signup route request", email, password);
         res.json({ message: 'User Created Signup successful', token });
-
     }
 
 });
